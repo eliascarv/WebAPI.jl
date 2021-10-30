@@ -52,21 +52,17 @@ function _body(::TextParser, req::HTTP.Request)
     return String(body)
 end
 
+
+const JSONTypes = Union{Dict, NamedTuple, AbstractVector{<:Real}, AbstractVector{<:Dict}, AbstractVector{<:NamedTuple}}
+
 _response(res_body) = HTTP.Response(200, HEADERS_TEXT, body = string(res_body))
-
 _response(res_body::AbstractString) = HTTP.Response(200, HEADERS_TEXT, body = res_body)
-
-_response(res_body::Union{Dict, NamedTuple}) = HTTP.Response(200, HEADERS_JSON, body = JSON3.write(res_body))
-
+_response(res_body::JSONTypes) = HTTP.Response(200, HEADERS_JSON, body = JSON3.write(res_body))
 
 serve(app::App) = serve(app, Sockets.localhost, 8081)
-
 serve(app::App, port::Int) = serve(app, Sockets.localhost, port)
-
 serve(app::App, ip::IPAddr) = serve(app, ip, 8081)
-
 serve(app::App, ip::AbstractString) = serve(app, parse(IPAddr, ip), 8081)
-
 serve(app::App, ip::AbstractString, port::Int) = serve(app, parse(IPAddr, ip), port)
 
 function serve(app::App, ip::IPAddr, port::Int)
