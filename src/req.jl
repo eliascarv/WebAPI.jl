@@ -1,14 +1,14 @@
 struct Params
-    p::Dict{Symbol, String}
+    dict::Dict{Symbol, String}
 end
 
 Params() = Params(Dict{Symbol, String}())
 
 function Base.getproperty(params::Params, prop::Symbol)
-    if prop in (:p,)
-        getfield(params, :p)
+    if prop == :dict
+        return getfield(params, :dict)
     end
-    return getindex(getfield(params, :p), prop)
+    return getindex(getfield(params, :dict), prop)
 end
 
 function createparams(request::HTTP.Request, path::String)
@@ -22,16 +22,16 @@ end
 
 
 struct Query
-    q::Dict{Symbol, String}
+    dict::Dict{Symbol, String}
 end
 
 Query() = Query(Dict{Symbol, String}())
 
 function Base.getproperty(query::Query, prop::Symbol)
-    if prop in (:q,)
-        getfield(query, :q)
+    if prop == :dict
+        return getfield(query, :dict)
     end
-    return getindex(getfield(query, :q), prop)
+    return getindex(getfield(query, :dict), prop)
 end
 
 function createquery(request::HTTP.Request)
@@ -44,7 +44,7 @@ function createquery(request::HTTP.Request)
 end
 
 
-const BodyTypes = Union{String, JSON3.Object}
+const BodyTypes = Union{String, JSON3.Object, JSON3.Array}
 
 struct Req{B<:BodyTypes}
     method::String

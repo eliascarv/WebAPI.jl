@@ -1,6 +1,7 @@
 function add_get!(func::Function, app::App, path::AbstractString)
-    if contains(path, ':')
-        paths = URIs.splitpath(path)
+    paths = URIs.splitpath(path)
+
+    if any(startswith.(paths, ':'))
         new_paths = map(paths) do str
             startswith(str, ':') ? "*" : str
         end
@@ -30,8 +31,9 @@ function add_get!(func::Function, app::App, path::AbstractString)
 end
 
 function add_post!(func::Function, app::App, path::AbstractString)
-    if contains(path, ':')
-        paths = URIs.splitpath(path)
+    paths = URIs.splitpath(path)
+
+    if any(startswith.(paths, ':'))
         new_paths = map(paths) do str
             startswith(str, ':') ? "*" : str
         end
@@ -61,8 +63,9 @@ function add_post!(func::Function, app::App, path::AbstractString)
 end
 
 function add_put!(func::Function, app::App, path::AbstractString)
-    if contains(path, ':')
-        paths = URIs.splitpath(path)
+    paths = URIs.splitpath(path)
+
+    if any(startswith.(paths, ':'))
         new_paths = map(paths) do str
             startswith(str, ':') ? "*" : str
         end
@@ -92,8 +95,9 @@ function add_put!(func::Function, app::App, path::AbstractString)
 end
 
 function add_patch!(func::Function, app::App, path::AbstractString)
-    if contains(path, ':')
-        paths = URIs.splitpath(path)
+    paths = URIs.splitpath(path)
+
+    if any(startswith.(paths, ':'))
         new_paths = map(paths) do str
             startswith(str, ':') ? "*" : str
         end
@@ -123,8 +127,9 @@ function add_patch!(func::Function, app::App, path::AbstractString)
 end
 
 function add_delete!(func::Function, app::App, path::AbstractString)
-    if contains(path, ':')
-        paths = URIs.splitpath(path)
+    paths = URIs.splitpath(path)
+
+    if any(startswith.(paths, ':'))
         new_paths = map(paths) do str
             startswith(str, ':') ? "*" : str
         end

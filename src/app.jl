@@ -4,8 +4,8 @@ struct JSONParser <: AbstractParser end
 
 struct TextParser <: AbstractParser end
 
-struct App{P<:AbstractParser}
-    router::HTTP.Router
+struct App{T, P<:AbstractParser}
+    router::HTTP.Router{T}
     reqparser::P
     routelist::Dict{String, Vector{String}}
 end

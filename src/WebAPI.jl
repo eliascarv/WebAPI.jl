@@ -6,6 +6,7 @@ using JSON3
 using Sockets
 
 export App, Req
+export JSONParser, TextParser
 export add_get!, add_post!, add_put!, add_patch!, add_delete!
 export serve
 
