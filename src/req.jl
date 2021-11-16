@@ -3,21 +3,19 @@ struct Params
 end
 
 Params() = Params(Dict{Symbol, String}())
+Params(kv::Iterators.Zip) = Params(Dict(kv))
 
-function Base.getproperty(params::Params, prop::Symbol)
-    if prop == :dict
-        return getfield(params, :dict)
-    end
-    return getindex(getfield(params, :dict), prop)
-end
+Base.Dict(params::Params) = copy(getfield(params, :dict))
+
+Base.getproperty(params::Params, prop::Symbol) = getindex(getfield(params, :dict), prop)
 
 function createparams(request::HTTP.Request, path::String)
     paths = URIs.splitpath(path)
-    p_names_str = filter(str -> startswith(str, ':'), paths)
-    p_positions = findall(x -> x ∈ p_names_str, paths)
-    p_names = map(str -> Symbol(str[2:end]), p_names_str)
-    p_values = URIs.splitpath(request.target)[p_positions]
-    return Params(Dict(zip(p_names, p_values)))
+    p_names = filter(str -> startswith(str, ':'), paths)
+    p_idxs = findall(x -> x ∈ p_names, paths)
+    k = map(str -> Symbol(str[2:end]), p_names)
+    v = URIs.splitpath(request.target)[p_idxs]
+    return Params(zip(k, v))
 end
 
 
@@ -26,20 +24,20 @@ struct Query
 end
 
 Query() = Query(Dict{Symbol, String}())
+Query(kv::Iterators.Zip) = Query(Dict(kv))
 
-function Base.getproperty(query::Query, prop::Symbol)
-    if prop == :dict
-        return getfield(query, :dict)
-    end
-    return getindex(getfield(query, :dict), prop)
-end
+Base.Dict(query::Query) = copy(getfield(query, :dict))
+
+Base.getproperty(query::Query, prop::Symbol) = getindex(getfield(query, :dict), prop)
 
 function createquery(request::HTTP.Request)
     dict = queryparams(URI(request.target))
     if isempty(dict)
         return Query()
     else
-        return Query(Dict( zip(Symbol.(keys(dict)), values(dict)) ))
+        k = Symbol.(keys(dict))
+        v = values(dict)
+        return Query(zip(k, v))
     end
 end
 

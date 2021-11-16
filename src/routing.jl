@@ -5,7 +5,7 @@ function add_get!(func::Function, app::App, path::AbstractString)
         new_paths = map(paths) do str
             startswith(str, ':') ? "*" : str
         end
-        new_path = joinpath(new_paths...)
+        new_path = "/" * join(new_paths, "/")
 
         handler = (request::HTTP.Request, body::BodyTypes) -> begin
             params = createparams(request, path)
@@ -37,7 +37,7 @@ function add_post!(func::Function, app::App, path::AbstractString)
         new_paths = map(paths) do str
             startswith(str, ':') ? "*" : str
         end
-        new_path = joinpath(new_paths...)
+        new_path = "/" * join(new_paths, "/")
 
         handler = (request::HTTP.Request, body::BodyTypes) -> begin
             params = createparams(request, path)
@@ -69,7 +69,7 @@ function add_put!(func::Function, app::App, path::AbstractString)
         new_paths = map(paths) do str
             startswith(str, ':') ? "*" : str
         end
-        new_path = joinpath(new_paths...)
+        new_path = "/" * join(new_paths, "/")
 
         handler = (request::HTTP.Request, body::BodyTypes) -> begin
             params = createparams(request, path)
@@ -101,7 +101,7 @@ function add_patch!(func::Function, app::App, path::AbstractString)
         new_paths = map(paths) do str
             startswith(str, ':') ? "*" : str
         end
-        new_path = joinpath(new_paths...)
+        new_path = "/" * join(new_paths, "/")
 
         handler = (request::HTTP.Request, body::BodyTypes) -> begin
             params = createparams(request, path)
@@ -133,7 +133,7 @@ function add_delete!(func::Function, app::App, path::AbstractString)
         new_paths = map(paths) do str
             startswith(str, ':') ? "*" : str
         end
-        new_path = joinpath(new_paths...)
+        new_path = "/" * join(new_paths, "/")
 
         handler = (request::HTTP.Request, body::BodyTypes) -> begin
             params = createparams(request, path)

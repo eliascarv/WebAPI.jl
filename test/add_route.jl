@@ -45,11 +45,11 @@
         app = App()
 
         add_get!(app, "/params/:x/:y") do req
-            return req.params.dict
+            return Dict(req.params)
         end
 
         add_get!(app, "/query") do req
-            return req.query.dict
+            return Dict(req.query)
         end
 
         params_req = HTTP.Request("GET", "/params/10/20")

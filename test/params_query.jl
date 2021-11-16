@@ -7,7 +7,7 @@
     @test params.b == "2"
     @test params.c == "3"
 
-    @test params.dict == Dict(:a => "1", :b => "2", :c => "3")
+    @test Dict(params) == Dict(:a => "1", :b => "2", :c => "3")
 end
 
 @testset "Crete Query" begin
@@ -18,5 +18,5 @@ end
     @test query.b == "2"
     @test query.c == "3"
 
-    @test query.dict == Dict(:a => "1", :b => "2", :c => "3")
+    @test Dict(query) == Dict(:a => "1", :b => "2", :c => "3")
 end
