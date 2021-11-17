@@ -7,7 +7,8 @@ using Sockets
 
 export App, Req, Res
 export JSONParser, TextParser
-export add_get!, add_post!, add_put!, add_patch!, add_delete!
+export add_get!, add_post!, add_put!, add_patch!
+export add_delete!, add_options!, add_head!
 export serve
 
 include("app.jl")
