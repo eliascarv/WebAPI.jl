@@ -1,17 +1,3 @@
-const HEADERS_JSON = [
-    "Access-Control-Allow-Origin" => "*",
-    "Access-Control-Allow-Headers" => "*",
-    "Access-Control-Allow-Methods" => "*",
-    "Content-Type" => "application/json"
-]
-
-const HEADERS_TEXT = [
-    "Access-Control-Allow-Origin" => "*",
-    "Access-Control-Allow-Headers" => "*",
-    "Access-Control-Allow-Methods" => "*",
-    "Content-Type" => "text/html"
-]
-
 function printroutes(app::App, ip::IPAddr, port::Int) 
     if ip == Sockets.localhost
         println("""\n
@@ -52,12 +38,10 @@ function _body(::TextParser, req::HTTP.Request)
     return String(body)
 end
 
-
-const JSONTypes = Union{Dict, NamedTuple, AbstractVector{<:Real}, AbstractVector{<:Dict}, AbstractVector{<:NamedTuple}}
-
-_response(res_body) = HTTP.Response(200, HEADERS_TEXT, body = string(res_body))
-_response(res_body::AbstractString) = HTTP.Response(200, HEADERS_TEXT, body = res_body)
-_response(res_body::JSONTypes) = HTTP.Response(200, HEADERS_JSON, body = JSON3.write(res_body))
+_response(res_body::HTTP.Response) = res_body
+_response(res_body) = HTTP.Response(200, HEADERS_TEXT, body=string(res_body))
+_response(res_body::AbstractString) = HTTP.Response(200, HEADERS_TEXT, body=res_body)
+_response(res_body::JSONTypes) = HTTP.Response(200, HEADERS_JSON, body=JSON3.write(res_body))
 
 serve(app::App) = serve(app, Sockets.localhost, 8081)
 serve(app::App, port::Int) = serve(app, Sockets.localhost, port)
