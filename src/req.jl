@@ -6,8 +6,15 @@ Params() = Params(Dict{Symbol, String}())
 Params(kv::Iterators.Zip) = Params(Dict(kv))
 
 Base.Dict(params::Params) = copy(getfield(params, :dict))
+Base.keys(params::Params) = keys(getfield(params, :dict))
+Base.values(params::Params) = values(getfield(params, :dict))
+Base.haskey(params::Params, key::Symbol) = haskey(getfield(params, :dict), key)
+Base.haskey(params::Params, key::AbstractString) = haskey(getfield(params, :dict), Symbol(key))
 
 Base.getproperty(params::Params, prop::Symbol) = getindex(getfield(params, :dict), prop)
+
+Base.getindex(params::Params, idx::Symbol) = getindex(getfield(params, :dict), idx)
+Base.getindex(params::Params, idx::AbstractString) = getindex(getfield(params, :dict), Symbol(idx))
 
 function createparams(request::HTTP.Request, path::String)
     paths = URIs.splitpath(path)
@@ -27,8 +34,15 @@ Query() = Query(Dict{Symbol, String}())
 Query(kv::Iterators.Zip) = Query(Dict(kv))
 
 Base.Dict(query::Query) = copy(getfield(query, :dict))
+Base.keys(query::Query) = keys(getfield(query, :dict))
+Base.values(query::Query) = values(getfield(query, :dict))
+Base.haskey(query::Query, key::Symbol) = haskey(getfield(query, :dict), key)
+Base.haskey(query::Query, key::AbstractString) = haskey(getfield(query, :dict), Symbol(key))
 
 Base.getproperty(query::Query, prop::Symbol) = getindex(getfield(query, :dict), prop)
+
+Base.getindex(query::Query, idx::Symbol) = getindex(getfield(query, :dict), idx)
+Base.getindex(query::Query, idx::AbstractString) = getindex(getfield(query, :dict), Symbol(idx))
 
 function createquery(request::HTTP.Request)
     dict = queryparams(URI(request.target))
