@@ -21,8 +21,8 @@
 
         @test get(params, :a, "test") == "1"
         @test get(params, :b, "test") == "2"
-        @test get(params, :c, "test") == "3"
-        @test get(params, :d, "test") == "test"
+        @test get(params, "c", "test") == "3"
+        @test get(params, "d", "test") == "test"
     
         @test haskey(params, :a) == true
         @test haskey(params, "b") == true
@@ -55,8 +55,8 @@
 
         @test get(params, :a, "test") == "1"
         @test get(params, :b, "test") == "2"
-        @test get(params, :c, "test") == "3"
-        @test get(params, :d, "test") == "test"
+        @test get(params, "c", "test") == "3"
+        @test get(params, "d", "test") == "test"
     
         @test haskey(params, :a) == true
         @test haskey(params, "b") == true
@@ -89,8 +89,8 @@ end
 
         @test get(query, :a, "test") == "1"
         @test get(query, :b, "test") == "2"
-        @test get(query, :c, "test") == "3"
-        @test get(query, :d, "test") == "test"
+        @test get(query, "c", "test") == "3"
+        @test get(query, "d", "test") == "test"
     
         @test haskey(query, :a) == true
         @test haskey(query, "b") == true
@@ -122,8 +122,8 @@ end
 
         @test get(query, :a, "test") == "1"
         @test get(query, :b, "test") == "2"
-        @test get(query, :c, "test") == "3"
-        @test get(query, :d, "test") == "test"
+        @test get(query, "c", "test") == "3"
+        @test get(query, "d", "test") == "test"
     
         @test haskey(query, :a) == true
         @test haskey(query, "b") == true

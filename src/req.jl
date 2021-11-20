@@ -7,20 +7,6 @@ Params() = Params(Dict{Symbol, String}())
 Params(kv::Iterators.Zip) = Params(Dict(kv))
 Params(kv::Pair{Symbol, String}...) = Params(Dict(kv))
 
-# AbstractDict Interface
-Base.Dict(params::Params) = copy(getfield(params, :dict))
-Base.length(params::Params) = length(getfield(params, :dict))
-Base.get(params::Params, args...) = get(getfield(params, :dict), args...)
-Base.iterate(params::Params, args...) = iterate(getfield(params, :dict), args...)
-# Personalided haskey and getindex
-Base.haskey(params::Params, key::Symbol) = haskey(getfield(params, :dict), key)
-Base.haskey(params::Params, key::AbstractString) = haskey(getfield(params, :dict), Symbol(key))
-Base.getindex(params::Params, idx::Symbol) = getindex(getfield(params, :dict), idx)
-Base.getindex(params::Params, idx::AbstractString) = getindex(getfield(params, :dict), Symbol(idx))
-
-Base.getproperty(params::Params, prop::Symbol) = getindex(getfield(params, :dict), prop)
-Base.propertynames(params::Params) = collect(keys(params))
-
 function createparams(request::HTTP.Request, path::String)
     paths = URIs.splitpath(path)
     p_names = filter(str -> startswith(str, ':'), paths)
@@ -39,20 +25,6 @@ Query() = Query(Dict{Symbol, String}())
 Query(kv::Iterators.Zip) = Query(Dict(kv))
 Query(kv::Pair{Symbol, String}...) = Query(Dict(kv))
 
-# AbstractDict Interface
-Base.Dict(query::Query) = copy(getfield(query, :dict))
-Base.length(query::Query) = length(getfield(query, :dict))
-Base.get(query::Query, args...) = get(getfield(query, :dict), args...)
-Base.iterate(query::Query, args...) = iterate(getfield(query, :dict), args...)
-# Personalided haskey and getindex
-Base.haskey(query::Query, key::Symbol) = haskey(getfield(query, :dict), key)
-Base.haskey(query::Query, key::AbstractString) = haskey(getfield(query, :dict), Symbol(key))
-Base.getindex(query::Query, idx::Symbol) = getindex(getfield(query, :dict), idx)
-Base.getindex(query::Query, idx::AbstractString) = getindex(getfield(query, :dict), Symbol(idx))
-
-Base.getproperty(query::Query, prop::Symbol) = getindex(getfield(query, :dict), prop)
-Base.propertynames(query::Query) = collect(keys(query))
-
 function createquery(request::HTTP.Request)
     dict = queryparams(URI(request.target))
     if isempty(dict)
@@ -63,6 +35,25 @@ function createquery(request::HTTP.Request)
         return Query(zip(k, v))
     end
 end
+
+const ParamsOrQuery = Union{Params, Query}
+
+# AbstractDict Interface
+Base.Dict(pq::ParamsOrQuery) = copy(getfield(pq, :dict))
+Base.length(pq::ParamsOrQuery) = length(getfield(pq, :dict))
+Base.get(pq::ParamsOrQuery, key::Symbol, default) = get(getfield(pq, :dict), key, default)
+Base.get(pq::ParamsOrQuery, key::AbstractString, default) = get(getfield(pq, :dict), Symbol(key), default)
+Base.get(default::Base.Callable, pq::ParamsOrQuery, key::Symbol) = get(default, getfield(pq, :dict), key)
+Base.get(default::Base.Callable, pq::ParamsOrQuery, key::AbstractString) = get(default, getfield(pq, :dict), Symbol(key))
+Base.iterate(pq::ParamsOrQuery, args...) = iterate(getfield(pq, :dict), args...)
+# Calling faster haskey and getindex methods defined for Dict type
+Base.haskey(pq::ParamsOrQuery, key::Symbol) = haskey(getfield(pq, :dict), key)
+Base.haskey(pq::ParamsOrQuery, key::AbstractString) = haskey(getfield(pq, :dict), Symbol(key))
+Base.getindex(pq::ParamsOrQuery, idx::Symbol) = getindex(getfield(pq, :dict), idx)
+Base.getindex(pq::ParamsOrQuery, idx::AbstractString) = getindex(getfield(pq, :dict), Symbol(idx))
+# params.key and query.key syntax
+Base.getproperty(pq::ParamsOrQuery, prop::Symbol) = getindex(getfield(pq, :dict), prop)
+Base.propertynames(pq::ParamsOrQuery) = collect(keys(pq))
 
 # Req
 const BodyTypes = Union{AbstractString, JSON3.Object, JSON3.Array}

@@ -35,3 +35,44 @@ end
 
 serve(app)
 ```
+
+More complex example:
+```julia
+using WebAPI
+
+function bhaskara(a, b, c)
+    Δ = b^2 - 4*a*c
+
+    Δ < 0 && (Δ = Complex(Δ))
+
+    x₁ = (-b + √Δ) / 2a
+    x₂ = (-b - √Δ) / 2a
+    return x₁, x₂
+end
+
+const app = App()
+
+add_get!(app, "/bhaskara") do req
+    verifykeys(req.query, [:a, :b, :c]) || return Res(400, "Incorrect Query.")
+
+    a = parse(Int, req.query.a)
+    b = parse(Int, req.query.b)
+    c = parse(Int, req.query.c)
+    x₁, x₂ = bhaskara(a, b, c)
+
+    return Dict("x1" => "$x₁", "x2" => "$x₂")
+end
+
+add_post!(app, "/bhaskara") do req
+    verifykeys(req.body, [:a, :b, :c]) || return Res(400, "Incorrect JSON.")
+
+    a = req.body.a
+    b = req.body.b
+    c = req.body.c
+    x₁, x₂ = bhaskara(a, b, c)
+
+    return Res(201, (x1 = "$x₁", x2 = "$x₂"))
+end
+
+serve(app)
+```
