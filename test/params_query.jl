@@ -1,52 +1,134 @@
-@testset "Crete Params" begin
-    req = HTTP.Request("GET", "/params/1/2/3")
-    path = "params/:a/:b/:c"
-    params = WebAPI.createparams(req, path)
-    dict = Dict(:a => "1", :b => "2", :c => "3")
+@testset "Params" begin
+    @testset "Constructor" begin
+        params = WebAPI.Params(:a => "1", :b => "2", :c => "3")
+        dict = Dict(:a => "1", :b => "2", :c => "3")
+    
+        @test params.a == "1"
+        @test params.b == "2"
+        @test params.c == "3"
+    
+        @test params[:a] == "1"
+        @test params[:b] == "2"
+        @test params[:c] == "3"
+    
+        @test params["a"] == "1"
+        @test params["b"] == "2"
+        @test params["c"] == "3"
+    
+        @test Dict(params) == dict
+        @test collect(keys(params)) == collect(keys(dict))
+        @test collect(values(params)) == collect(values(dict))
 
-    @test params.a == "1"
-    @test params.b == "2"
-    @test params.c == "3"
+        @test get(params, :a, "test") == "1"
+        @test get(params, :b, "test") == "2"
+        @test get(params, :c, "test") == "3"
+        @test get(params, :d, "test") == "test"
+    
+        @test haskey(params, :a) == true
+        @test haskey(params, "b") == true
+        @test haskey(params, :d) == false
 
-    @test params[:a] == "1"
-    @test params[:b] == "2"
-    @test params[:c] == "3"
+        @test propertynames(params) == [:a, :b, :c]
+    end
 
-    @test params["a"] == "1"
-    @test params["b"] == "2"
-    @test params["c"] == "3"
+    @testset "Crete Params" begin
+        req = HTTP.Request("GET", "/params/1/2/3")
+        path = "params/:a/:b/:c"
+        params = WebAPI.createparams(req, path)
+        dict = Dict(:a => "1", :b => "2", :c => "3")
+    
+        @test params.a == "1"
+        @test params.b == "2"
+        @test params.c == "3"
+    
+        @test params[:a] == "1"
+        @test params[:b] == "2"
+        @test params[:c] == "3"
+    
+        @test params["a"] == "1"
+        @test params["b"] == "2"
+        @test params["c"] == "3"
+    
+        @test Dict(params) == dict
+        @test collect(keys(params)) == collect(keys(dict))
+        @test collect(values(params)) == collect(values(dict))
 
-    @test Dict(params) == dict
-    @test collect(keys(params)) == collect(keys(dict))
-    @test collect(values(params)) == collect(values(dict))
+        @test get(params, :a, "test") == "1"
+        @test get(params, :b, "test") == "2"
+        @test get(params, :c, "test") == "3"
+        @test get(params, :d, "test") == "test"
+    
+        @test haskey(params, :a) == true
+        @test haskey(params, "b") == true
+        @test haskey(params, :d) == false
 
-    @test haskey(params, :a) == true
-    @test haskey(params, "b") == true
-    @test haskey(params, :d) == false
+        @test propertynames(params) == [:a, :b, :c]
+    end
 end
 
-@testset "Crete Query" begin
-    req = HTTP.Request("GET", "/query?a=1&b=2&c=3")
-    query = WebAPI.createquery(req)
-    dict = Dict(:a => "1", :b => "2", :c => "3")
+@testset "Query" begin
+    @testset "Constructor" begin
+        query = WebAPI.Query(:a => "1", :b => "2", :c => "3")
+        dict = Dict(:a => "1", :b => "2", :c => "3")
+    
+        @test query.a == "1"
+        @test query.b == "2"
+        @test query.c == "3"
+    
+        @test query[:a] == "1"
+        @test query[:b] == "2"
+        @test query[:c] == "3"
+    
+        @test query["a"] == "1"
+        @test query["b"] == "2"
+        @test query["c"] == "3"
+    
+        @test Dict(query) == dict
+        @test collect(keys(query)) == collect(keys(dict))
+        @test collect(values(query)) == collect(values(dict))
 
-    @test query.a == "1"
-    @test query.b == "2"
-    @test query.c == "3"
+        @test get(query, :a, "test") == "1"
+        @test get(query, :b, "test") == "2"
+        @test get(query, :c, "test") == "3"
+        @test get(query, :d, "test") == "test"
+    
+        @test haskey(query, :a) == true
+        @test haskey(query, "b") == true
+        @test haskey(query, :d) == false
 
-    @test query[:a] == "1"
-    @test query[:b] == "2"
-    @test query[:c] == "3"
+        @test propertynames(query) == [:a, :b, :c]
+    end
 
-    @test query["a"] == "1"
-    @test query["b"] == "2"
-    @test query["c"] == "3"
+    @testset "Crete Query" begin
+        req = HTTP.Request("GET", "/query?a=1&b=2&c=3")
+        query = WebAPI.createquery(req)
+        dict = Dict(:a => "1", :b => "2", :c => "3")
+    
+        @test query.a == "1"
+        @test query.b == "2"
+        @test query.c == "3"
+    
+        @test query[:a] == "1"
+        @test query[:b] == "2"
+        @test query[:c] == "3"
+    
+        @test query["a"] == "1"
+        @test query["b"] == "2"
+        @test query["c"] == "3"
+    
+        @test Dict(query) == dict
+        @test collect(keys(query)) == collect(keys(dict))
+        @test collect(values(query)) == collect(values(dict))
 
-    @test Dict(query) == dict
-    @test collect(keys(query)) == collect(keys(dict))
-    @test collect(values(query)) == collect(values(dict))
+        @test get(query, :a, "test") == "1"
+        @test get(query, :b, "test") == "2"
+        @test get(query, :c, "test") == "3"
+        @test get(query, :d, "test") == "test"
+    
+        @test haskey(query, :a) == true
+        @test haskey(query, "b") == true
+        @test haskey(query, :d) == false
 
-    @test haskey(query, :a) == true
-    @test haskey(query, "b") == true
-    @test haskey(query, :d) == false
+        @test propertynames(query) == [:a, :b, :c]
+    end
 end
