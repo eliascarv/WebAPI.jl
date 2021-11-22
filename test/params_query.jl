@@ -23,6 +23,11 @@
         @test get(params, :b, "test") == "2"
         @test get(params, "c", "test") == "3"
         @test get(params, "d", "test") == "test"
+
+        @test get(() -> "test", params, :a) == "1"
+        @test get(() -> "test", params, :b) == "2"
+        @test get(() -> "test", params, "c") == "3"
+        @test get(() -> "test", params, "d") == "test"
     
         @test haskey(params, :a) == true
         @test haskey(params, "b") == true
@@ -57,6 +62,11 @@
         @test get(params, :b, "test") == "2"
         @test get(params, "c", "test") == "3"
         @test get(params, "d", "test") == "test"
+
+        @test get(() -> "test", params, :a) == "1"
+        @test get(() -> "test", params, :b) == "2"
+        @test get(() -> "test", params, "c") == "3"
+        @test get(() -> "test", params, "d") == "test"
     
         @test haskey(params, :a) == true
         @test haskey(params, "b") == true
@@ -91,6 +101,11 @@ end
         @test get(query, :b, "test") == "2"
         @test get(query, "c", "test") == "3"
         @test get(query, "d", "test") == "test"
+
+        @test get(() -> "test", query, :a) == "1"
+        @test get(() -> "test", query, :b) == "2"
+        @test get(() -> "test", query, "c") == "3"
+        @test get(() -> "test", query, "d") == "test"
     
         @test haskey(query, :a) == true
         @test haskey(query, "b") == true
@@ -124,6 +139,11 @@ end
         @test get(query, :b, "test") == "2"
         @test get(query, "c", "test") == "3"
         @test get(query, "d", "test") == "test"
+
+        @test get(() -> "test", query, :a) == "1"
+        @test get(() -> "test", query, :b) == "2"
+        @test get(() -> "test", query, "c") == "3"
+        @test get(() -> "test", query, "d") == "test"
     
         @test haskey(query, :a) == true
         @test haskey(query, "b") == true
