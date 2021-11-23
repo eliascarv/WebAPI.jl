@@ -52,6 +52,15 @@ end
 
 const app = App()
 
+add_get!(app, "/bhaskara/:a/:b/:c") do req
+    a = parse(Int, req.params.a)
+    b = parse(Int, req.params.b)
+    c = parse(Int, req.params.c)
+    x₁, x₂ = bhaskara(a, b, c)
+
+    return Dict("x1" => "$x₁", "x2" => "$x₂")
+end
+
 add_get!(app, "/bhaskara") do req
     verifykeys(req.query, [:a, :b, :c]) || return Res(400, "Incorrect Query.")
 
@@ -60,7 +69,7 @@ add_get!(app, "/bhaskara") do req
     c = parse(Int, req.query.c)
     x₁, x₂ = bhaskara(a, b, c)
 
-    return Dict("x1" => "$x₁", "x2" => "$x₂")
+    return (x1 = "$x₁", x2 = "$x₂")
 end
 
 add_post!(app, "/bhaskara") do req
