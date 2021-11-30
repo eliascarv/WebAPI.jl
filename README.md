@@ -62,7 +62,7 @@ add_get!(app, "/bhaskara/:a/:b/:c") do req
 end
 
 add_get!(app, "/bhaskara") do req
-    verifykeys(req.query, [:a, :b, :c]) || return Res(400, "Incorrect Query.")
+    verifykeys(req.query, (:a, :b, :c)) || return Res(400, "Incorrect Query.")
 
     a = parse(Int, req.query.a)
     b = parse(Int, req.query.b)
@@ -73,7 +73,7 @@ add_get!(app, "/bhaskara") do req
 end
 
 add_post!(app, "/bhaskara") do req
-    verifykeys(req.body, [:a, :b, :c]) || return Res(400, "Incorrect JSON.")
+    verifykeys(req.body, ["a", "b", "c"]) || return Res(400, "Incorrect JSON.")
 
     a = req.body.a
     b = req.body.b

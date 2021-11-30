@@ -1,12 +1,9 @@
 const AbstractStringOrSymbol = Union{AbstractString, Symbol}
 
 # Verifies if the object has keys from vector
-function verifykeys(
+function verifykeys( 
     d::Union{JSON3.Object, Params, Query}, 
-    ks::AbstractVector{T}
-) where {T<:AbstractStringOrSymbol}
-    @inbounds for i in eachindex(ks)
-        haskey(d, ks[i]) || return false
-    end
-    return true
+    ks::Union{Tuple{Vararg{T}}, AbstractVector{T}}
+) where {T<:AbstractStringOrSymbol} 
+    return all(k -> haskey(d, k), ks)
 end
