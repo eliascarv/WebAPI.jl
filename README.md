@@ -33,7 +33,7 @@ add_post!(app, "/bhaskara") do req
     return Dict("x1" => "$x₁", "x2" => "$x₂")
 end
 
-serve(app)
+serve(app) #Deafult: ip = localhost, port = 8081
 ```
 
 More complex example:
@@ -83,5 +83,75 @@ add_post!(app, "/bhaskara") do req
     return Res(201, (x1 = "$x₁", x2 = "$x₂"))
 end
 
-serve(app)
+serve(app) #Deafult: ip = localhost, port = 8081
+```
+The above code running:
+```
+  App running at:
+  http://localhost:8081/
+
+  Method           Route
+  ==============================================
+
+  POST             /bhaskara
+  GET              /bhaskara/:a/:b/:c
+  GET              /bhaskara
+```
+Testing the API:
+```julia
+julia> using HTTP, JSON3
+
+julia> r = HTTP.get("http://localhost:8081/bhaskara/1/3/-4")
+HTTP.Messages.Response:
+"""
+HTTP/1.1 200 OK
+Access-Control-Allow-Origin: *
+Access-Control-Allow-Headers: *
+Access-Control-Allow-Methods: *
+Content-Type: application/json
+Transfer-Encoding: chunked
+
+{"x1":"1.0","x2":"-4.0"}"""
+
+julia> JSON3.read(r.body)
+JSON3.Object{Vector{UInt8}, Vector{UInt64}} with 2 entries:
+  :x1 => "1.0"
+  :x2 => "-4.0"
+
+julia> r = HTTP.get("http://localhost:8081/bhaskara?a=1&b=3&c=-4")
+HTTP.Messages.Response:
+"""
+HTTP/1.1 200 OK
+Access-Control-Allow-Origin: *
+Access-Control-Allow-Headers: *
+Access-Control-Allow-Methods: *
+Content-Type: application/json
+Transfer-Encoding: chunked
+
+{"x1":"1.0","x2":"-4.0"}"""
+
+julia> JSON3.read(r.body)
+JSON3.Object{Vector{UInt8}, Vector{UInt64}} with 2 entries:
+  :x1 => "1.0"
+  :x2 => "-4.0"
+
+julia> json = JSON3.write((a = 1, b = 3, c = -4))
+"{\"a\":1,\"b\":3,\"c\":-4}"
+
+julia> r = HTTP.post("http://localhost:8081/bhaskara", [], json)
+HTTP.Messages.Response:
+"""
+HTTP/1.1 201 Created
+Access-Control-Allow-Origin: *
+Access-Control-Allow-Headers: *
+Access-Control-Allow-Methods: *
+Content-Type: application/json
+Transfer-Encoding: chunked
+
+{"x1":"1.0","x2":"-4.0"}"""
+
+julia> JSON3.read(r.body)
+JSON3.Object{Vector{UInt8}, Vector{UInt64}} with 2 entries:
+  :x1 => "1.0"
+  :x2 => "-4.0"
 ```
