@@ -1,16 +1,10 @@
-const HEADERS_JSON = [
+const CORS = [
     "Access-Control-Allow-Origin" => "*",
     "Access-Control-Allow-Headers" => "*",
-    "Access-Control-Allow-Methods" => "*",
-    "Content-Type" => "application/json"
+    "Access-Control-Allow-Methods" => "*"
 ]
-
-const HEADERS_TEXT = [
-    "Access-Control-Allow-Origin" => "*",
-    "Access-Control-Allow-Headers" => "*",
-    "Access-Control-Allow-Methods" => "*",
-    "Content-Type" => "text/html"
-]
+const HEADERS_JSON = [CORS...,"Content-Type" => "application/json"]
+const HEADERS_TEXT = [CORS..., "Content-Type" => "text/html"]
 
 const JSONTypes = Union{Dict, NamedTuple, AbstractVector{<:Real}, AbstractVector{<:Dict}, AbstractVector{<:NamedTuple}}
 const HeaderType = Vector{Pair{String, String}}
@@ -32,12 +26,26 @@ Res(headers::HeaderType, body) = HTTP.Response(200, headers, body=string(body))
 Res(headers::HeaderType, body::AbstractString) = HTTP.Response(200, headers, body=body)
 Res(headers::HeaderType, body::JSONTypes) = HTTP.Response(200, headers, body=JSON3.write(body))
 
+function Res(content_type::String, body) 
+    HTTP.Response(200, [CORS..., "Content-Type" => content_type], body=string(body))
+end
+function Res(content_type::String, body::AbstractString)
+    HTTP.Response(200, [CORS..., "Content-Type" => content_type], body=body)
+end
+
+function Res(status::Integer, content_type::String, body) 
+    HTTP.Response(status, [CORS..., "Content-Type" => content_type], body=string(body))
+end
+function Res(status::Integer, content_type::String, body::AbstractString)
+    HTTP.Response(status, [CORS..., "Content-Type" => content_type], body=body)
+end
+
 function Res(status::Integer, headers::HeaderType, body)
-    return HTTP.Response(status, headers, body=string(body))
+    HTTP.Response(status, headers, body=string(body))
 end
 function Res(status::Integer, headers::HeaderType, body::AbstractString)
-    return HTTP.Response(status, headers, body=body)
+    HTTP.Response(status, headers, body=body)
 end
 function Res(status::Integer, headers::HeaderType, body::JSONTypes)
-    return HTTP.Response(status, headers, body=JSON3.write(body))
+    HTTP.Response(status, headers, body=JSON3.write(body))
 end
