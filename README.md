@@ -15,7 +15,7 @@ using WebAPI
 function bhaskara(a, b, c)
     Δ = b^2 - 4*a*c
 
-    Δ < 0 && (Δ = Complex(Δ))
+    Δ < 0 && (Δ = complex(Δ))
 
     x₁ = (-b + √Δ) / 2a
     x₂ = (-b - √Δ) / 2a
@@ -43,7 +43,7 @@ using WebAPI
 function bhaskara(a, b, c)
     Δ = b^2 - 4*a*c
 
-    Δ < 0 && (Δ = Complex(Δ))
+    Δ < 0 && (Δ = complex(Δ))
 
     x₁ = (-b + √Δ) / 2a
     x₂ = (-b - √Δ) / 2a
