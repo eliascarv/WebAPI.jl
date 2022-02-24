@@ -6,8 +6,13 @@ const CORS = [
 const HEADERS_JSON = [CORS...,"Content-Type" => "application/json"]
 const HEADERS_TEXT = [CORS..., "Content-Type" => "text/html"]
 
-const JSONTypes = Union{Dict, NamedTuple, AbstractVector{<:Real}, AbstractVector{<:Dict}, AbstractVector{<:NamedTuple}}
+const JSONTypes = Union{
+    Dict, NamedTuple, AbstractVector{<:Real}, 
+    AbstractVector{<:Dict}, AbstractVector{<:NamedTuple}
+}
 const HeaderType = Vector{Pair{String, String}}
+
+Res(body::HTTP.Response) = body
 
 Res(status::Integer) = HTTP.Response(status)
 Res(headers::HeaderType) = HTTP.Response(200, headers)

@@ -5,6 +5,7 @@
     body_json = Dict("x" => 10, "y" => 20)
     body_str = "Test"
     body_any = 2 + 3im
+    response = HTTP.Response(200, "Test")
 
     @testset "One argument" begin
         res1 = Res(status)
@@ -12,6 +13,7 @@
         res3 = Res(body_any)
         res4 = Res(body_str)
         res5 = Res(body_json)
+        res6 = Res(response)
 
         @test res1.status == status
         @test res2.headers == headers_test
@@ -27,6 +29,8 @@
         @test res5.body == HTTP.bytes(JSON3.write(body_json))
         @test res5.status == 200
         @test res5.headers == WebAPI.HEADERS_JSON
+
+        @test res6 === response
     end
 
     @testset "Two arguments" begin

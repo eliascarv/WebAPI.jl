@@ -32,11 +32,6 @@ function parsebody(::TextParser, req::HTTP.Request)
     return String(body)
 end
 
-_response(res_body::HTTP.Response) = res_body
-_response(res_body) = HTTP.Response(200, HEADERS_TEXT, body=string(res_body))
-_response(res_body::AbstractString) = HTTP.Response(200, HEADERS_TEXT, body=res_body)
-_response(res_body::JSONTypes) = HTTP.Response(200, HEADERS_JSON, body=JSON3.write(res_body))
-
 serve(app::App) = serve(app, Sockets.localhost, 8081)
 serve(app::App, port::Int) = serve(app, Sockets.localhost, port)
 serve(app::App, ip::IPAddr) = serve(app, ip, 8081)
@@ -49,6 +44,6 @@ function serve(app::App, ip::IPAddr, port::Int)
     HTTP.serve(ip, port) do req::HTTP.Request
         req_body = parsebody(app.reqparser, req)
         res_body = HTTP.handle(app.router, req, req_body)
-        return _response(res_body)
+        return Res(res_body)
     end
 end
