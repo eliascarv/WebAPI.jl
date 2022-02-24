@@ -1,28 +1,22 @@
-function printroutes(app::App, ip::IPAddr, port::Int) 
+function apprunning(io::IO, app::App, ip::IPAddr, port::Int) 
     if ip == Sockets.localhost
-        println("""\n
-          App running at:
-          http://localhost:$port/
+        print(io, """
 
-          Method           Route
-          ==============================================
+          App running at:
+          http://localhost:$port/\n
         """)
     else
-        println("""\n
-          App running at:
-          http://$ip:$port/
+        print(io, """
 
-          Method           Route
-          ==============================================
+          App running at:
+          http://$ip:$port/\n
         """)
     end
-
-    for (method, routes) in app.routelist
-        for route in routes
-            println("  $(rpad(method, 17))", route)
-        end
-    end
+    
+    routetable(io, app)
 end
+
+apprunning(app::App, ip::IPAddr, port::Int) = apprunning(stdout, app, ip, port)
 
 function createbody(::JSONParser, req::HTTP.Request)
     body = IOBuffer(HTTP.payload(req))
@@ -50,7 +44,7 @@ serve(app::App, ip::AbstractString) = serve(app, parse(IPAddr, ip), 8081)
 serve(app::App, ip::AbstractString, port::Int) = serve(app, parse(IPAddr, ip), port)
 
 function serve(app::App, ip::IPAddr, port::Int)
-    printroutes(app, ip, port)
+    apprunning(app, ip, port)
 
     HTTP.serve(ip, port) do req::HTTP.Request
         req_body = createbody(app.reqparser, req)

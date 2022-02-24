@@ -23,3 +23,20 @@ function App(; reqparser::AbstractParser = JSONParser())
     )
     return App(router, reqparser, routelist)
 end
+
+function routetable(io::IO, app::App)
+    print(io, """
+      Method        Route
+      ==============================================
+    """)
+    for (method, routes) in app.routelist
+        for route in routes
+            println(io, "  $(rpad(method, 14))", route)
+        end
+    end
+end
+
+function Base.show(io::IO, app::App)
+    println(io, "App with reqparser = $(typeof(app.reqparser)) and routes:\n")
+    routetable(io, app)
+end

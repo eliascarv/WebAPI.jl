@@ -90,12 +90,11 @@ The above code running:
   App running at:
   http://localhost:8081/
 
-  Method           Route
+  Method        Route
   ==============================================
-
-  POST             /bhaskara
-  GET              /bhaskara/:a/:b/:c
-  GET              /bhaskara
+  POST          /bhaskara
+  GET           /bhaskara/:a/:b/:c
+  GET           /bhaskara
 ```
 Testing the API:
 ```julia
