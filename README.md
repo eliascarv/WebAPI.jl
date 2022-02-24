@@ -96,61 +96,46 @@ The above code running:
   GET           /bhaskara/:a/:b/:c
   GET           /bhaskara
 ```
-Testing the API:
-```julia
-julia> using HTTP, JSON3
-
-julia> r = HTTP.get("http://localhost:8081/bhaskara/1/3/-4")
-HTTP.Messages.Response:
-"""
+Testing the API using HTTPie:
+```zsh
+➜  ~ http GET localhost:8081/bhaskara/1/3/-4
 HTTP/1.1 200 OK
-Access-Control-Allow-Origin: *
 Access-Control-Allow-Headers: *
 Access-Control-Allow-Methods: *
+Access-Control-Allow-Origin: *
 Content-Type: application/json
 Transfer-Encoding: chunked
 
-{"x1":"1.0","x2":"-4.0"}"""
+{
+    "x1": "1.0",
+    "x2": "-4.0"
+}
 
-julia> JSON3.read(r.body)
-JSON3.Object{Vector{UInt8}, Vector{UInt64}} with 2 entries:
-  :x1 => "1.0"
-  :x2 => "-4.0"
 
-julia> r = HTTP.get("http://localhost:8081/bhaskara?a=1&b=3&c=-4")
-HTTP.Messages.Response:
-"""
+➜  ~ http GET localhost:8081/bhaskara a==1 b==3 c==-4
 HTTP/1.1 200 OK
-Access-Control-Allow-Origin: *
 Access-Control-Allow-Headers: *
 Access-Control-Allow-Methods: *
+Access-Control-Allow-Origin: *
 Content-Type: application/json
 Transfer-Encoding: chunked
 
-{"x1":"1.0","x2":"-4.0"}"""
+{
+    "x1": "1.0",
+    "x2": "-4.0"
+}
 
-julia> JSON3.read(r.body)
-JSON3.Object{Vector{UInt8}, Vector{UInt64}} with 2 entries:
-  :x1 => "1.0"
-  :x2 => "-4.0"
 
-julia> json = JSON3.write((a = 1, b = 3, c = -4))
-"{\"a\":1,\"b\":3,\"c\":-4}"
-
-julia> r = HTTP.post("http://localhost:8081/bhaskara", [], json)
-HTTP.Messages.Response:
-"""
+➜  ~ http POST localhost:8081/bhaskara a:=1 b:=3 c:=-4
 HTTP/1.1 201 Created
-Access-Control-Allow-Origin: *
 Access-Control-Allow-Headers: *
 Access-Control-Allow-Methods: *
+Access-Control-Allow-Origin: *
 Content-Type: application/json
 Transfer-Encoding: chunked
 
-{"x1":"1.0","x2":"-4.0"}"""
-
-julia> JSON3.read(r.body)
-JSON3.Object{Vector{UInt8}, Vector{UInt64}} with 2 entries:
-  :x1 => "1.0"
-  :x2 => "-4.0"
+{
+    "x1": "1.0",
+    "x2": "-4.0"
+}
 ```
