@@ -43,8 +43,8 @@ Base.Dict(pq::ParamsOrQuery) = copy(getfield(pq, :dict))
 Base.length(pq::ParamsOrQuery) = length(getfield(pq, :dict))
 Base.get(pq::ParamsOrQuery, key::Symbol, default) = get(getfield(pq, :dict), key, default)
 Base.get(pq::ParamsOrQuery, key::AbstractString, default) = get(getfield(pq, :dict), Symbol(key), default)
-Base.get(default::Base.Callable, pq::ParamsOrQuery, key::Symbol) = get(default, getfield(pq, :dict), key)
-Base.get(default::Base.Callable, pq::ParamsOrQuery, key::AbstractString) = get(default, getfield(pq, :dict), Symbol(key))
+Base.get(f::Base.Callable, pq::ParamsOrQuery, key::Symbol) = get(f, getfield(pq, :dict), key)
+Base.get(f::Base.Callable, pq::ParamsOrQuery, key::AbstractString) = get(f, getfield(pq, :dict), Symbol(key))
 Base.iterate(pq::ParamsOrQuery, args...) = iterate(getfield(pq, :dict), args...)
 # Calling faster haskey and getindex methods defined for Dict type
 Base.haskey(pq::ParamsOrQuery, key::Symbol) = haskey(getfield(pq, :dict), key)
@@ -56,9 +56,7 @@ Base.getproperty(pq::ParamsOrQuery, prop::Symbol) = getindex(getfield(pq, :dict)
 Base.propertynames(pq::ParamsOrQuery) = collect(keys(pq))
 
 # Req
-const BodyTypes = Union{AbstractString, JSON3.Object, JSON3.Array}
-
-struct Req{B<:BodyTypes}
+struct Req{B}
     method::String
     target::String
     params::Params
