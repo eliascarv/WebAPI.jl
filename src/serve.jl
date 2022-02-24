@@ -24,7 +24,7 @@ function printroutes(app::App, ip::IPAddr, port::Int)
     end
 end
 
-function _body(::JSONParser, req::HTTP.Request)
+function createbody(::JSONParser, req::HTTP.Request)
     body = IOBuffer(HTTP.payload(req))
     if eof(body)
         return JSON3.Object()
@@ -33,7 +33,7 @@ function _body(::JSONParser, req::HTTP.Request)
     end
 end
 
-function _body(::TextParser, req::HTTP.Request)
+function createbody(::TextParser, req::HTTP.Request)
     body = HTTP.payload(req)
     return String(body)
 end
@@ -53,7 +53,7 @@ function serve(app::App, ip::IPAddr, port::Int)
     printroutes(app, ip, port)
 
     HTTP.serve(ip, port) do req::HTTP.Request
-        req_body = _body(app.reqparser, req)
+        req_body = createbody(app.reqparser, req)
         res_body = HTTP.handle(app.router, req, req_body)
         return _response(res_body)
     end

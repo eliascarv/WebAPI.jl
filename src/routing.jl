@@ -20,7 +20,7 @@ for METHOD in METHODS
             end
             newpath = "/" * join(newpaths, "/")
 
-            handler = (request::HTTP.Request, body) -> begin
+            handler = (request::HTTP.Request, body::BodyTypes) -> begin
                 params = createparams(request, path)
                 query = createquery(request)
                 req = Req(request.method, path, params, query, body)
@@ -29,7 +29,7 @@ for METHOD in METHODS
 
             HTTP.@register(app.router, $METHOD, newpath, handler)
         else
-            handler = (request::HTTP.Request, body) -> begin
+            handler = (request::HTTP.Request, body::BodyTypes) -> begin
                 params = Params()
                 query = createquery(request)
                 req = Req(request.method, request.target, params, query, body)

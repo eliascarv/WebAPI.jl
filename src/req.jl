@@ -56,7 +56,9 @@ Base.getproperty(pq::ParamsOrQuery, prop::Symbol) = getindex(getfield(pq, :dict)
 Base.propertynames(pq::ParamsOrQuery) = collect(keys(pq))
 
 # Req
-struct Req{B}
+const BodyTypes = Union{AbstractString, JSON3.Object, JSON3.Array}
+
+struct Req{B<:BodyTypes}
     method::String
     target::String
     params::Params

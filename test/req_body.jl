@@ -8,8 +8,8 @@
 
         @test app.reqparser isa JSONParser
 
-        @test WebAPI._body(app.reqparser, req) == JSON3.read(req.body)
-        @test WebAPI._body(app.reqparser, req_empty) == JSON3.Object()
+        @test WebAPI.createbody(app.reqparser, req) == JSON3.read(req.body)
+        @test WebAPI.createbody(app.reqparser, req_empty) == JSON3.Object()
     end
 
     @testset "Text Parser" begin
@@ -19,6 +19,6 @@
 
         @test app.reqparser isa TextParser
 
-        @test WebAPI._body(app.reqparser, req) == req_body
+        @test WebAPI.createbody(app.reqparser, req) == req_body
     end
 end
