@@ -18,7 +18,7 @@ end
 
 apprunning(app::App, ip::IPAddr, port::Int) = apprunning(stdout, app, ip, port)
 
-function createbody(::JSONParser, req::HTTP.Request)
+function parsebody(::JSONParser, req::HTTP.Request)
     body = IOBuffer(HTTP.payload(req))
     if eof(body)
         return JSON3.Object()
@@ -27,7 +27,7 @@ function createbody(::JSONParser, req::HTTP.Request)
     end
 end
 
-function createbody(::TextParser, req::HTTP.Request)
+function parsebody(::TextParser, req::HTTP.Request)
     body = HTTP.payload(req)
     return String(body)
 end
@@ -47,7 +47,7 @@ function serve(app::App, ip::IPAddr, port::Int)
     apprunning(app, ip, port)
 
     HTTP.serve(ip, port) do req::HTTP.Request
-        req_body = createbody(app.reqparser, req)
+        req_body = parsebody(app.reqparser, req)
         res_body = HTTP.handle(app.router, req, req_body)
         return _response(res_body)
     end
