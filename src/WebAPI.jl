@@ -4,6 +4,7 @@ using HTTP
 using HTTP.URIs
 using JSON3
 using Sockets
+using Sockets: localhost
 
 export App, Req, Res
 export JSONParser, TextParser
