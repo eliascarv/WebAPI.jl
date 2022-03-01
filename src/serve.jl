@@ -16,7 +16,8 @@ function apprunning(io::IO, app::App, ip::IPAddr, port::Int)
     routetable(io, app)
 end
 
-apprunning(app::App, ip::IPAddr, port::Int) = apprunning(stdout, app, ip, port)
+apprunning(app::App, ip::IPAddr, port::Int) = 
+    apprunning(stdout, app, ip, port)
 
 function parsebody(::JSONParser, req::HTTP.Request)
     body = IOBuffer(HTTP.payload(req))
@@ -32,13 +33,11 @@ function parsebody(::TextParser, req::HTTP.Request)
     return String(body)
 end
 
-serve(app::App) = serve(app, Sockets.localhost, 8081)
 serve(app::App, port::Int) = serve(app, Sockets.localhost, port)
-serve(app::App, ip::IPAddr) = serve(app, ip, 8081)
-serve(app::App, ip::AbstractString) = serve(app, parse(IPAddr, ip), 8081)
-serve(app::App, ip::AbstractString, port::Int) = serve(app, parse(IPAddr, ip), port)
+serve(app::App, ip::AbstractString, port::Int = 8081) = 
+    serve(app, parse(IPAddr, ip), port)
 
-function serve(app::App, ip::IPAddr, port::Int)
+function serve(app::App, ip::IPAddr = localhost, port::Int = 8081)
     apprunning(app, ip, port)
 
     HTTP.serve(ip, port) do req::HTTP.Request
