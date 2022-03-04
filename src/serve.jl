@@ -1,5 +1,5 @@
 function apprunning(io::IO, app::App, ip::IPAddr, port::Int) 
-    if ip == Sockets.localhost
+    if ip == localhost
         print(io, """
 
           App running at:
@@ -33,7 +33,7 @@ function parsebody(::TextParser, req::HTTP.Request)
     return String(body)
 end
 
-serve(app::App, port::Int) = serve(app, Sockets.localhost, port)
+serve(app::App, port::Int) = serve(app, localhost, port)
 serve(app::App, ip::AbstractString, port::Int = 8081) = 
     serve(app, parse(IPAddr, ip), port)
 

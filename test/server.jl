@@ -17,7 +17,7 @@
             @test String(res.body) == "Ok"
             @test res.status == 200
     
-            wait(schedule(server_task, InterruptException(); error=true))
+            wait(schedule(server_task, InterruptException(), error=true))
         end
 
         @testset "serve(app, port)" begin
@@ -37,7 +37,7 @@
             @test String(res.body) == "Ok"
             @test res.status == 200
     
-            wait(schedule(server_task, InterruptException(); error=true))
+            wait(schedule(server_task, InterruptException(), error=true))
         end
 
         @testset "serve(app, ip::AbstractString)" begin
@@ -57,7 +57,7 @@
             @test String(res.body) == "Ok"
             @test res.status == 200
     
-            wait(schedule(server_task, InterruptException(); error=true))
+            wait(schedule(server_task, InterruptException(), error=true))
         end
 
         @testset "serve(app, ip::IPAddr)" begin
@@ -77,7 +77,7 @@
             @test String(res.body) == "Ok"
             @test res.status == 200
     
-            wait(schedule(server_task, InterruptException(); error=true))
+            wait(schedule(server_task, InterruptException(), error=true))
         end
 
         @testset "serve(app, ip::AbstractString, port)" begin
@@ -97,7 +97,7 @@
             @test String(res.body) == "Ok"
             @test res.status == 200
     
-            wait(schedule(server_task, InterruptException(); error=true))
+            wait(schedule(server_task, InterruptException(), error=true))
         end
 
         @testset "serve(app, ip::IPAddr, port)" begin
@@ -117,7 +117,7 @@
             @test String(res.body) == "Ok"
             @test res.status == 200
     
-            wait(schedule(server_task, InterruptException(); error=true))
+            wait(schedule(server_task, InterruptException(), error=true))
         end
     end
 
@@ -186,6 +186,6 @@
         @test json.x2 == "-4.0"
         @test res.status == 201
 
-        wait(schedule(server_task, InterruptException(); error=true))
+        wait(schedule(server_task, InterruptException(), error=true))
     end
 end
