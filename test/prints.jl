@@ -1,14 +1,12 @@
 @testset "Prints" begin
     @testset "routetable" begin
-        io = IOBuffer()
         app = App()
         add_post!(app, "test") do req
             body = req.body
             return body
         end
 
-        WebAPI.routetable(io, app)
-        iostr = String(take!(io))
+        iostr = sprint(WebAPI.routetable, app)
 
         str = """
           Method        Route
@@ -20,15 +18,13 @@
     end
 
     @testset "App show" begin
-        io = IOBuffer()
         app = App()
         add_post!(app, "test") do req
             body = req.body
             return body
         end
 
-        show(io, app)
-        iostr = String(take!(io))
+        iostr = sprint(show, app)
 
         str = """
         App with reqparser = JSONParser and routes:\n
@@ -42,15 +38,13 @@
 
     @testset "apprunning" begin
         # localhost
-        io = IOBuffer()
         app = App()
         add_post!(app, "test") do req
             body = req.body
             return body
         end
 
-        WebAPI.apprunning(io, app, Sockets.localhost, 80)
-        iostr = String(take!(io))
+        iostr = sprint(WebAPI.apprunning, app, Sockets.localhost, 80)
 
         str = """
 
@@ -64,15 +58,13 @@
         @test iostr == str
 
         # other ips
-        io = IOBuffer()
         app = App()
         add_post!(app, "test") do req
             body = req.body
             return body
         end
 
-        WebAPI.apprunning(io, app, ip"192.168.0.1", 80)
-        iostr = String(take!(io))
+        iostr = sprint(WebAPI.apprunning, app, ip"192.168.0.1", 80)
 
         str = """
 
